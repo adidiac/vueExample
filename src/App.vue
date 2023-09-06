@@ -12,9 +12,5 @@ export default {
   components: {
     Home
   },
- created:function() {
-    this.$store.commit('increment')
-    console.log(this.$store.state.count)
-  }
 }
 </script>

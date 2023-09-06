@@ -1,18 +1,19 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import './installComposition.js'
+import vuetify from  '@/plugins/installVuetify.js'
+import '@/plugins/installComposition.js'
+import App from '@/App'
 import Vue from 'vue'
-import App from './App'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
-    count: 0
+    selectedStudent: null,
   },
   mutations: {
-    increment (state) {
-      state.count++
+    setSelectedStudent(state, student) {
+      state.selectedStudent = student
     }
   }
 })
@@ -26,4 +27,5 @@ new Vue({
   components: { App },
   template: '<App/>',
   store: store,
+  vuetify: vuetify
 })

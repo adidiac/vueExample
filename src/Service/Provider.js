@@ -1,27 +1,38 @@
 export const repositories=()=>
 {
     return {
-        student:StudentRepository(),
-        note:NoteRepository()
+        students:StudentsRepository,
+        grades:GradesRepository
     };
-}
+};
 
 
-const studentMockData=[
+const studentsMockData=[
     {
         id:1,
-        name:"John Doe",
-        email:"",
+        firstName:"John",
+        lastName:"Doe",
+        dateOfBirth:"2000-01-01",
+        class:"1A",
     },
     {
         id:2,
-        name:"Jane Doe",
-        email:"",
+        firstName:"Jane",
+        lastName:"Doe",
+        dateOfBirth:"2000-01-01",
+        class:"1A",
     },
+    {
+        id:3,
+        firstName:"John",
+        lastName:"Smith",
+        dateOfBirth:"2000-01-01",
+        class:"1A",
+    }
 ]
-const StudentRepository=()=>
+const StudentsRepository=()=>
 {
-    const data=studentMockData; //to be changed to database
+    const data=studentsMockData; //to be changed to database
     return {
         getAll:()=>	
         {
@@ -34,29 +45,29 @@ const StudentRepository=()=>
     }
 }
 
-const notesMockData=[
+const gradesMockData=[
     {
         id:1,
         studentId:1,
-        title:"Note 1",
-        content:"Content 1",
+        grade:5,
+        subject:"Math", 
     },
     {
         id:2,
         studentId:1,
-        title:"Note 2",
-        content:"Content 2",
+        grade:4,
+        subject:"Math",
     },
     {
         id:3,
         studentId:2,
-        title:"Note 3",
-        content:"Content 3",
+        grade:3,
+        subject:"Math",
     },
 ]
-const NoteRepository=()=>
+const GradesRepository=()=>
 {
-    const data=notesMockData; //to be changed to database
+    const data=gradesMockData; //to be changed to database
     return {
         getAll:()=>	
         {
@@ -70,5 +81,16 @@ const NoteRepository=()=>
         {
             return data.filter((note)=>note.studentId===studentId);
         },
+        getWithStudentFullName:()=>
+        {
+            return data.map((note)=>
+            {
+                const student=StudentsRepository().getById(note.studentId);
+                return {
+                    ...note,
+                    student:student.firstName+" "+student.lastName,
+                }
+            });
+        }
     }
 }
