@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <v-app>
     <h1>Students</h1>
     <StudentTabel ></StudentTabel>
     <h1>Notes</h1>
     <NotesTable></NotesTable>
-  </div>
+  </v-app>
 </template>
 <script>
 import { ref} from '@vue/composition-api';
