@@ -9,7 +9,7 @@
             v-model="selected"
             class="elevation-1"
         >
-        <template v-slot:top>
+        <template #top>
         <v-toolbar flat>
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -64,14 +64,11 @@
                 type:Array,
                 required:true
             },
-            selectedProp:Array,
             showSelect:{
                 type:Boolean,
                 default:true
             },
-            selectAction:{
-                type:Function,
-            },
+         
             addInputs:{
                 type:Array,
                 required:true
@@ -83,12 +80,12 @@
         },
         data() {
             return {
-                selected: this.selectedProp?this.selectedProp:[]
+                selected: []
             };
         },
         watch: {
             selected() {
-                this.selectAction(this.selected);
+                this.$emit('selected',this.selected);
             },
         },
         methods:{
