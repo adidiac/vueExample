@@ -1,10 +1,18 @@
 <template>
     <div>
-      <button class="btn btn-primary" @click="handleShow">Add</button>
-      <ModalForm :show="show" :onHide="handleClose" :onSubmit="handleSubmit" title="Add" submitButtonText="Add">
+      <button class="btn btn-primary dark" @click="handleShow">
+        <slot></slot>
+      </button>
+      <ModalForm :show="show" :onHide="handleClose" :onSubmit="handleSubmit" :title="title" :submitButtonText="title">
         <div v-for="(field, index) in fields" :key="index" class="form-group">
-            <label :for="field.name">{{ field.label }}</label>
+          <!-- check if select -->
+            <label v-if="field.type === 'select'" :for="field.name">{{ field.label }}</label> 
+            <select v-if="field.type === 'select'" :id="field.name" :name="field.name" v-model="field.value" class="form-input">
+              <option v-for="(option, index) in field.options" :key="index" :value="option.value">{{ option.text }}</option>
+            </select>
+            <label v-if="field.type != 'select'" :for="field.name">{{ field.label }}</label>
             <input
+                v-if="field.type != 'select'"
                 :id="field.name"
                 :name="field.name"
                 :type="field.type"
@@ -24,10 +32,10 @@
     props: {
       formsInputs: Array,
       submitForm: Function,
+      title: String,
     },
     components: {
-      Modal,
-      CustomForm,
+      ModalForm,
     },
     data() {
       return {

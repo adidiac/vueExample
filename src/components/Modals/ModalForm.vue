@@ -42,14 +42,14 @@
   };
   </script>
   
-  <style scoped>
+  <style >
   /* Add your modal styles here */
   .modal {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,6 +63,7 @@
   
   .modal-content {
     border-radius: 8px;
+    background-color: #fff;
   }
   
   .modal-header {
