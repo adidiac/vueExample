@@ -11,11 +11,23 @@ const store = new Vuex.Store({
   state: {
     selectedStudent: null,
   },
-  mutations: {
-    setSelectedStudent(state, student) {
-      state.selectedStudent = student
+  getters: {
+    selectedStudent (state) {
+      return state.selectedStudent
     }
-  }
+  },
+ 
+  mutations: {
+    SET_STUDENT (state, value) {
+      state.selectedStudent = value
+    }
+  },
+ 
+  actions: {
+    setSelectedStudent ({ commit, state }, value) {
+      commit('SET_STUDENT', value)
+    }
+  },
 })
 
 Vue.config.productionTip = false

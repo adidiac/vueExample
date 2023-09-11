@@ -1,10 +1,4 @@
-export const repositories=()=>
-{
-    return {
-        students:StudentsRepository,
-        grades:GradesRepository
-    };
-};
+import { localStorageService } from "./LocalStorage";
 
 
 const studentsMockData=[
@@ -13,26 +7,26 @@ const studentsMockData=[
         firstName:"John",
         lastName:"Doe",
         dateOfBirth:"2000-01-01",
-        class:"1A",
+        class:"1A"
     },
     {
         id:2,
         firstName:"Jane",
         lastName:"Doe",
         dateOfBirth:"2000-01-01",
-        class:"1A",
+        class:"1A"
     },
     {
         id:3,
         firstName:"John",
         lastName:"Smith",
         dateOfBirth:"2000-01-01",
-        class:"1A",
+        class:"1A"
     }
-]
+];
 const StudentsRepository=()=>
 {
-    const data=studentsMockData; //to be changed to database
+    let data=localStorageService().createIfNotExists('students',studentsMockData);
     return {
         getAll:()=>	
         {
@@ -47,8 +41,12 @@ const StudentsRepository=()=>
             return [{ text: 'First Name',value: 'firstName',type:'text',placeholder:'Enter First Name' ,rules: [val => (val || '').length > 0 || 'This field is required'],},
               { text: 'Last Name', value: 'lastName',type:'text',placeholder:'Enter Last Name' ,rules: [val => (val || '').length > 0 || 'This field is required'],},
               {text:'Date of Birth',value:'dateOfBirth',type:"date",placeholder:'Enter Date of Birth'},
-              {text:'Class',value:'class',type:'text',placeholder:'Enter Class'}
+              {text:'Class',value:'class',type:'text',placeholder:'Enter Class'},
             ]
+        },
+        update:(students)=>
+        {
+            localStorageService().set('students',students);
         },
     }
 }
@@ -75,7 +73,7 @@ const gradesMockData=[
 ]
 const GradesRepository=()=>
 {
-    const data=gradesMockData; //to be changed to database
+    let data=localStorageService().createIfNotExists('grades',gradesMockData);
     return {
         getAll:()=>	
         {
@@ -118,5 +116,22 @@ const GradesRepository=()=>
                 {text:'Grade',value:'grade',type:'number',placeholder:'Enter Grade'},
             ]
         },
+        update:(grades)=>
+        {
+            localStorageService().set('grades',grades);
+        }
     }
 }
+const repositories=()=>
+{
+    const studentsRepository=StudentsRepository();
+    const gradesRepository=GradesRepository();
+    return {
+        students:studentsRepository,
+        grades:gradesRepository,
+    };
+};
+
+const provider=repositories();
+
+export {provider};

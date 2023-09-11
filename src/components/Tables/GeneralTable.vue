@@ -120,7 +120,121 @@
     </v-card>
 </template>
 <script>
-    import GenericFormModal from '../Modals/GenericFormModal.vue';
+import { ref, computed, watch,nextTick } from '@vue/composition-api';
+export default {
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    objectProps: {
+      type: Array,
+      required: true,
+    },
+    itemsList: {
+      type: Array,
+      required: true,
+    },
+    showSelect: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  setup(props,{emit}) {
+    const selected = ref([]);
+    const dialog = ref(false);
+    const dialogDelete = ref(false);
+    const editedIndex = ref(-1);
+    const defaultItem = computed(() => {
+      return props.objectProps.reduce((acc, prop) => {
+        acc[prop.value] = '';
+        return acc;
+      }, {});
+    });
+    const editedItem = ref({ ...defaultItem.value });
+
+    const formTitle = computed(() => {
+      return editedIndex.value === -1 ? 'New Item' : 'Edit Item';
+    });
+
+    const close = () => {
+      dialog.value = false;
+      nextTick(() => {
+        editedItem.value = { ...defaultItem.value };
+        editedIndex.value = -1;
+      })
+
+    };
+
+    const closeDelete = () => {
+      dialogDelete.value = false;
+      nextTick(() => {
+        editedItem.value = { ...defaultItem.value };
+        editedIndex.value = -1;
+      })
+    };
+
+    const editItem = (item) => {
+      editedIndex.value = props.itemsList.indexOf(item);
+      editedItem.value = { ...item };
+      dialog.value = true;
+    };
+
+    const deleteItem = (item) => {
+      editedIndex.value = props.itemsList.indexOf(item);
+      editedItem.value = { ...item };
+      dialogDelete.value = true;
+    };
+
+    const deleteItemConfirm = () => {
+      props.itemsList.splice(editedIndex.value, 1);
+      emit('save', props.itemsList);
+      closeDelete();
+    };
+
+    const save = () => {
+      if (editedIndex.value > -1) {
+        Object.assign(props.itemsList[editedIndex.value], editedItem.value);
+      } else {
+        props.itemsList.push({ ...editedItem.value });
+      }
+      emit('save', props.itemsList);
+      close();
+    };
+
+    watch(selected, () => {
+      emit('selected', selected.value);
+    });
+
+    watch(dialog, (val) => {
+        val || close();
+    });
+
+    watch(dialogDelete, (val) => {
+        val || closeDelete();
+    });
+
+
+    return {
+      selected,
+      dialog,
+      dialogDelete,
+      editedIndex,
+      editedItem,
+      defaultItem,
+      formTitle,
+      close,
+      closeDelete,
+      editItem,
+      deleteItem,
+      deleteItemConfirm,
+      save,
+    };
+  },
+};
+</script>
+
+<!---<script>
     export default {
         props:{
             title:{
@@ -174,9 +288,7 @@
         },
         methods:{
             editItem (item) {
-                console.log(item);
                 this.editedIndex = this.itemsList.indexOf(item)
-                console.log(this.editedIndex)
                 this.editedItem = Object.assign({}, item)
                 this.dialog = true
             },
@@ -189,6 +301,7 @@
 
             deleteItemConfirm () {
                 this.itemsList.splice(this.editedIndex, 1)
+                this.$emit('save',this.itemsList);
                 this.closeDelete()
             },
 
@@ -214,9 +327,9 @@
                 } else {
                 this.itemsList.push(this.editedItem)
                 }
+                this.$emit('save',this.itemsList);
                 this.close()
             },
-        },
-        components: { GenericFormModal },
+        }
     }
-</script>
+</script> -->
