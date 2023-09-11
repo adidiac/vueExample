@@ -1,20 +1,16 @@
 <template>
   <v-app>
     <GeneralTable 
-      :headers="studentHeaders" 
+      :objectProps="studentProps" 
       :itemsList="studentItems" 
       title="Students" 
       @selected="actionSelect"
-      :addInputs="addInputsStudent"
-      :updateFields="updateInputsStudent"
     />
     <GeneralTable 
-      :headers="gradesHeaders" 
+      :objectProps="gradesProps" 
       :itemsList="gradesItems" 
       title="Grades"
-      :showSelect="false" 
-      :addInputs="addInputsGrade"
-      :updateFields="updateInputsGrade"
+      :showSelect="false"
      v-if="show" />
   </v-app>
 </template>
@@ -25,13 +21,9 @@ export default {
     data() {
         return {
           selectedStudents: null,
-          studentHeaders:repositories().students().getHeaders(),
+          studentProps:repositories().students().getObjectProps(),
           studentItems:repositories().students().getAll(),
-          gradesHeaders:repositories().grades().getHeaders(),
-          addInputsStudent:repositories().students().getInputsFields(),
-          updateInputsStudent:repositories().students().getUpdateFieldsWihtValues,
-          addInputsGrade:repositories().grades().getInputsFields(),
-          updateInputsGrade:repositories().grades().getUpdateFieldsWihtValues,
+          gradesProps:repositories().grades().getObjectProps(),
         }
     },
     methods:{

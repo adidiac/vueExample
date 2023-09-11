@@ -42,31 +42,14 @@ const StudentsRepository=()=>
         {
             return data.find((student)=>student.id===id);
         },
-        getHeaders:()=>
+        getObjectProps:()=>
         {
-            return [{ text: 'First Name',value: 'firstName',},
-              { text: 'Last Name', value: 'lastName' },
-              {text:'Date of Birth',value:'dateOfBirth'},
-              {text:'Class',value:'class'}]
-        },
-        getInputsFields:()=>
-        {
-            return [
-                {label:'First Name',name:'firstName',type:'text',placeholder:'Enter First Name'},
-                {label:'Last Name',name:'lastName',type:'text',placeholder:'Enter Last Name'},
-                {label:'Date of Birth',name:'dateOfBirth',type:'date',placeholder:'Enter Date of Birth'},
-                {label:'Class',name:'class',type:'text',placeholder:'Enter Class'},
+            return [{ text: 'First Name',value: 'firstName',type:'text',placeholder:'Enter First Name' ,rules: [val => (val || '').length > 0 || 'This field is required'],},
+              { text: 'Last Name', value: 'lastName',type:'text',placeholder:'Enter Last Name' ,rules: [val => (val || '').length > 0 || 'This field is required'],},
+              {text:'Date of Birth',value:'dateOfBirth',type:"date",placeholder:'Enter Date of Birth'},
+              {text:'Class',value:'class',type:'text',placeholder:'Enter Class'}
             ]
         },
-        getUpdateFieldsWihtValues:(student)=>
-        {                
-            return [
-                {label:'First Name',name:'firstName',type:'text',value:student.firstName},
-                {label:'Last Name',name:'lastName',type:'text',value:student.lastName},
-                {label:'Date of Birth',name:'dateOfBirth',type:'date',value:student.dateOfBirth},
-                {label:'Class',name:'class',type:'text',value:student.class},
-            ]
-        }
     }
 }
 
@@ -128,27 +111,12 @@ const GradesRepository=()=>
                 }
             });
         },
-        getHeaders:()=>
+        getObjectProps:()=>
         {
-            return [{text:'Student',value:'student'},
-                {text:'Subject',value:'subject'},
-                {text:'Grade',value:'grade'}]
-        },
-        getInputsFields:()=>
-        {
-            return [
-                {label:'Student',name:'studentId',type:'select',options:StudentsRepository().getAll().map((student)=>({text:student.firstName+" "+student.lastName,value:student.id}))},
-                {label:'Subject',name:'subject',type:'select',placeholder:'Enter Subject', options:[{text:'Math',value:'Math'},{text:'English',value:'English'},{text:'Science',value:'Science'}]},
-                {label:'Grade',name:'grade',type:'number',placeholder:'Enter Grade'},
+            return [{text:'Student',value:'student',type:'select',options:StudentsRepository().getAll().map((student)=>({text:student.firstName+" "+student.lastName,value:student.id}))},
+                {text:'Subject',value:'subject',type:'select',placeholder:'Enter Subject', options:[{text:'Math',value:'Math'},{text:'English',value:'English'},{text:'Science',value:'Science'}]},
+                {text:'Grade',value:'grade',type:'number',placeholder:'Enter Grade'},
             ]
         },
-        getUpdateFieldsWihtValues:(note)=>
-        {                
-            return [
-                {label:'Student',name:'studentId',type:'select',options:StudentsRepository().getAll().map((student)=>({text:student.firstName+" "+student.lastName,value:student.id})),value:note.studentId},
-                {label:'Subject',name:'subject',type:'select',placeholder:'Enter Subject', options:[{text:'Math',value:'Math'},{text:'English',value:'English'},{text:'Science',value:'Science'}],value:note.subject},
-                {label:'Grade',name:'grade',type:'number',placeholder:'Enter Grade',value:note.grade},
-            ]
-        }
     }
 }
